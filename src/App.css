@@ -38,9 +38,9 @@
 }
 
 .sider {
-  flex: 1;
+  flex-shrink: 3;
 }
 
 .content {
-  flex: 3;
+  flex-grow: 4;
 }

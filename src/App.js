@@ -17,7 +17,7 @@ function App() {
         <div className = 'sider'>
           <SideBar />
         </div>
-        <div className = 'content' >
+        <div className = 'content'>
           <TableForm />
         </div>
         
