@@ -1,8 +1,12 @@
 import SideBar from './component/sidebar/sidebar'
-import TableForm from './component/table'
+import EmployeeList from './component/table'
 import 'antd/dist/antd.css';
 import './App.css'
-import { Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd'
+import {BrowserRouter as Router,
+  Switch,
+  Route} from "react-router-dom"
+import Home from './component/home';
 
 function App() {
 
@@ -10,7 +14,8 @@ function App() {
   const { SubMenu } = Menu;
 
   return (
-    <div className="App">
+    <Router>
+      <div className="App">
       <header >
       </header>
       <body className = 'container'>
@@ -18,11 +23,18 @@ function App() {
           <SideBar />
         </div>
         <div className = 'content'>
-          <TableForm />
+          <Switch>
+            <Route exact path = '/'>
+              <Home />
+            </Route>
+            <Route exact path = '/employees'>
+              <EmployeeList />
+            </Route>
+          </Switch>
         </div>
-        
       </body>
     </div>
+    </Router>
   );
 }
 

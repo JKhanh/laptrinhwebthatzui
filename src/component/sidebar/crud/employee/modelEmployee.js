@@ -1,16 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import {Modal} from 'antd';
 
 const EmployeeForm = () => {
-    const [visible, setVisible] = useEffect(true) 
-    const [confirmLoading, setConfirmLoading] = useEffect(false)  
+    const [visible, setVisible] = useState(false) 
+    const [confirmLoading, setConfirmLoading] = useState(false)  
 
     const handleOk = () =>{
-        setConfirmLoading(true)
-        setTimeout(() => {
-            setVisible(false)
-            setConfirmLoading(false)
-        }, 10)
+        setVisible(false)
+        setConfirmLoading(false)
     }
 
     const handleCancel = () =>{

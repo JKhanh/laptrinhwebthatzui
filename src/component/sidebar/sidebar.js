@@ -9,6 +9,7 @@ import {
   ContainerOutlined,
   MailOutlined,
 } from '@ant-design/icons';
+import {Link} from 'react-router-dom'
 
 const { SubMenu } = Menu;
 
@@ -38,7 +39,9 @@ function SideBar() {
           <Menu.Item key="2">Công Ty</Menu.Item>
           <Menu.Item key="3">Phòng</Menu.Item>
           <Menu.Item key="4">Dịch Vụ</Menu.Item>
-          <Menu.Item key="5">Nhân Viên</Menu.Item>
+          <Menu.Item key="5">
+            <Link to='/employees'>Nhân Viên</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Thống Kê">
           <Menu.Item key="6">Doanh Thu Theo Phòng</Menu.Item>
