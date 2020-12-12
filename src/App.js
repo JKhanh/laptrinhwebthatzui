@@ -1,5 +1,6 @@
 import SideBar from './component/sidebar/sidebar'
-import EmployeeList from './component/table'
+import EmployeeList from './component/crud/staffList'
+import CompanyList from './component/crud/company'
 import 'antd/dist/antd.css';
 import './App.css'
 import { Layout, Menu } from 'antd'
@@ -26,6 +27,9 @@ function App() {
           <Switch>
             <Route exact path = '/'>
               <Home />
+            </Route>
+            <Route exact path = '/companies'>
+              <CompanyList />
             </Route>
             <Route exact path = '/employees'>
               <EmployeeList />

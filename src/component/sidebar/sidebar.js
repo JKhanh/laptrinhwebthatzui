@@ -36,16 +36,19 @@ function SideBar() {
           Trang Cá Nhân
         </Menu.Item>
         <SubMenu key="sub1" icon={<MailOutlined />} title="Quản Lý">
-          <Menu.Item key="2">Công Ty</Menu.Item>
-          <Menu.Item key="3">Phòng</Menu.Item>
-          <Menu.Item key="4">Dịch Vụ</Menu.Item>
-          <Menu.Item key="5">
+          <Menu.Item key="2">
+            <Link to='/companies'>Công Ty</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to='/services'>Dịch Vụ</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
             <Link to='/employees'>Nhân Viên</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Thống Kê">
-          <Menu.Item key="6">Doanh Thu Theo Phòng</Menu.Item>
-          <Menu.Item key="7">Doanh Thu Theo Dịch Vụ</Menu.Item>
+          <Menu.Item key="5">Doanh Thu Theo Phòng</Menu.Item>
+          <Menu.Item key="6">Doanh Thu Theo Dịch Vụ</Menu.Item>
         </SubMenu>
       </Menu>
     </div>
