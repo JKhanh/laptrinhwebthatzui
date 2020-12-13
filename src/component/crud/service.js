@@ -58,7 +58,9 @@ const ServiceList = () =>{
         key: "action",
         render: (text, record) => (
           <Space size="middle">
-            <a>Sửa</a>
+            <a onClick={(e) => {
+              updateService(record);
+            }}>Sửa</a>
             <a onClick={ (e) =>{
                 deleteService(record.id)
             }}>Xóa</a>
@@ -67,11 +69,17 @@ const ServiceList = () =>{
       },
   ]
 
+  const updateService = (service) =>{
+      setService(service)
+      showModel()
+  }
+
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [service, setService] = useReducer(
       (state, newState) => ({...state, ...newState}),
       {
+        id: 0,
         service_code: "",
         name: "",
         type: "",
@@ -95,7 +103,7 @@ const ServiceList = () =>{
     setVisible(true);
   };
 
-  const handleOk = () =>{
+  const handlePost = () =>{
       setConfirmLoading(true)
       axios.post(url, {
           service_code: service.service_code,
@@ -111,6 +119,25 @@ const ServiceList = () =>{
         setVisible(false);
         setConfirmLoading(false);
       });
+  }
+
+  const handlePut = () => {
+    setConfirmLoading(true)
+    axios.put(url, {
+        id: service.id,
+        service_code: service.service_code,
+        name: service.name,
+        type: service.type,
+        unit_price: service.unit_price
+    }).then((response) => {
+      fetch(pagination);
+      notification["success"]({
+        message: "Update Success",
+        duration: 3,
+      });
+      setVisible(false);
+      setConfirmLoading(false);
+    });
   }
 
   const handleCancel = () => {
@@ -131,9 +158,28 @@ const ServiceList = () =>{
       <Modal
         title="Add new Service"
         visible={visible}
-        onOk={handleOk}
+        onOk={handlePost}
         onCancel={handleCancel}
         confirmLoading={confirmLoading}
+        footer={[
+            <Button key="back" onClick={handleCancel}>
+              Return
+            </Button>,
+            <Button
+              key="put"
+              type="primary"
+              loading={loading}
+              onClick={handlePut} >
+              Update
+            </Button>,
+            <Button
+              key="post"
+              type="primary"
+              loading={loading}
+              onClick={handlePost}>
+              Add new
+            </Button>,
+          ]}
       >
         <Input
           placeholder="Service Name"

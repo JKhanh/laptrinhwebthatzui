@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Button, Table, Tag, Space, Modal, Input, DatePicker, notification } from "antd";
+import { Button, Table, Space, Modal, Input, DatePicker, notification } from "antd";
 import reqwest from "reqwest";
 import axios from "axios";
 
@@ -81,7 +81,9 @@ const StaffList = () => {
       key: "action",
       render: (text, record) => (
         <Space size="middle">
-          <a>Sửa</a>
+          <a onClick={(e) => {
+              updateStaff(record);
+            }}>Sửa</a>
           <a onClick={ (e) =>{
             deleteStaff(record.id)
           }}>Xóa</a>
@@ -89,6 +91,11 @@ const StaffList = () => {
       ),
     },
   ];
+
+  const updateStaff = (staff) =>{
+    setStaff(staff)
+    showModal()
+  }
 
   const deleteStaff = (id) =>{
     axios.delete(url + '/' + id)
@@ -107,6 +114,7 @@ const StaffList = () => {
   const [staff, setStaff] = useReducer(
     (state, newState) => ({...state, ...newState}),
     {
+      id: 0,
       name: "",
       address: "",
       code: "",
@@ -119,7 +127,7 @@ const StaffList = () => {
     setVisible(true);
   };
 
-  const handleOk = () => {
+  const handlePost = () => {
     console.log(staff)
     axios.post(url,
      {'name': staff.name, 'code': staff.code, 'address': staff.address, 'date_of_birth': staff.date_of_birth, 'phone_number': staff.phone_number})
@@ -138,6 +146,27 @@ const StaffList = () => {
     setVisible(false);
     console.log("Cancel Dialog");
   };
+
+  const handlePut = () => {
+    axios.put(url,
+      {
+        'id': staff.id,
+        'name': staff.name, 
+        'code': staff.code, 
+        'address': staff.address, 
+        'date_of_birth': staff.date_of_birth, 
+        'phone_number': staff.phone_number
+    })
+     .then(response => {
+       fetch(pagination)
+       notification['success']({
+         message : 'Update Success',
+         duration: 3,
+       })
+       setVisible(false);
+       setConfirmLoading(false); 
+     })
+  }
 
   const handleChanged = (evt) => {
     const {name, value} = evt.target
@@ -159,9 +188,28 @@ const StaffList = () => {
       <Modal
         title="Add new Employee"
         visible={visible}
-        onOk={handleOk}
+        onOk={handlePost}
         onCancel={handleCancel}
-        confirmLoading={confirmLoading}>
+        confirmLoading={confirmLoading}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button
+            key="put"
+            type="primary"
+            loading={loading}
+            onClick={handlePut} >
+            Update
+          </Button>,
+          <Button
+            key="post"
+            type="primary"
+            loading={loading}
+            onClick={handlePost}>
+            Add new
+          </Button>,
+        ]}>
         <Input
           placeholder="Name"
           name="name"
@@ -183,7 +231,6 @@ const StaffList = () => {
         <DatePicker
           placeholder="Date of Birth"
           name="date_of_birth"
-          className="date_of_birth"
           onChange={(date, dateString) => handleDate(date, dateString)}
         />
         <Input

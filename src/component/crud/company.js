@@ -2,8 +2,7 @@ import React, { useReducer, useState, useEffect } from "react";
 import { Button, Table, Tag, Space, Modal, Input, notification } from "antd";
 import reqwest from "reqwest";
 import axios from "axios";
-import EmployeeList from "./employee"
-import 'antd/dist/antd.css';
+import "antd/dist/antd.css";
 
 const CompanyList = () => {
   const url = "http://128.199.190.229:9393/api/v1/companies";
@@ -34,12 +33,12 @@ const CompanyList = () => {
       url: url,
       method: "get",
       type: "json",
-      error: function(err) {
-        if(err.status === 404){
+      error: function (err) {
+        if (err.status === 404) {
           setLoading(false);
           setData([]);
         }
-      }
+      },
     }).then((data) => {
       console.log(data);
       setLoading(false);
@@ -102,20 +101,36 @@ const CompanyList = () => {
       key: "action",
       render: (text, record) => (
         <Space size="middle">
-          <a>Sửa</a>
-          <a onClick={ (e) =>{
-            deleteCompany(record.id)
-          }}>Xóa</a>
+          <a
+            onClick={(e) => {
+              updateCompany(record);
+            }}
+          >
+            Sửa
+          </a>
+          <a
+            onClick={(e) => {
+              deleteCompany(record.id);
+            }}
+          >
+            Xóa
+          </a>
         </Space>
       ),
     },
   ];
+
+  const updateCompany = (company) => {
+    setCompany(company);
+    showModel();
+  };
 
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [company, setCompany] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
+      id: 0,
       address_in_building: "",
       authorized_capital: 0,
       company_id: 0,
@@ -131,24 +146,23 @@ const CompanyList = () => {
     setVisible(true);
   };
 
-  const deleteCompany = (id) =>{
-    axios.delete(url + '/' + id)
-    .then((response) =>{
-        console.log(response)
-        fetch(pagination);
-        notification["success"]({
-            message: "Deleted",
-            duration: 3,
-          });
-    })
-  }
+  const deleteCompany = (id) => {
+    axios.delete(url + "/" + id).then((response) => {
+      console.log(response);
+      fetch(pagination);
+      notification["success"]({
+        message: "Deleted",
+        duration: 3,
+      });
+    });
+  };
 
-  const handleOk = () => {
+  const handlePost = () => {
     axios
       .post(url, {
         address_in_building: company.address_in_building,
         authorized_capital: company.authorized_capital,
-        company_name: company.name,
+        company_name: company.company_name,
         field_of_operation: company.field_of_operation,
         ground_area: company.ground_area,
         phone_number: company.phone_number,
@@ -169,6 +183,27 @@ const CompanyList = () => {
     setVisible(false);
   };
 
+  const handlePut = () => {
+    axios.put(url, {
+      company_id: company.id,
+      address_in_building: company.address_in_building,
+      authorized_capital: company.authorized_capital,
+      company_name: company.company_name,
+      field_of_operation: company.field_of_operation,
+      ground_area: company.ground_area,
+      phone_number: company.phone_number,
+      tax_number: company.tax_number,
+    }).then((response) => {
+      fetch(pagination);
+      notification["success"]({
+        message: "Update Success",
+        duration: 3,
+      });
+      setVisible(false);
+      setConfirmLoading(false);
+    });
+  }
+
   const handleChanged = (evt) => {
     const { name, value } = evt.target;
     setCompany({ [name]: value });
@@ -183,14 +218,33 @@ const CompanyList = () => {
       <Modal
         title="Add new Company"
         visible={visible}
-        onOk={handleOk}
+        onOk={handlePost}
         onCancel={handleCancel}
         confirmLoading={confirmLoading}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button
+            key="put"
+            type="primary"
+            loading={loading}
+            onClick={handlePut} >
+            Update
+          </Button>,
+          <Button
+            key="post"
+            type="primary"
+            loading={loading}
+            onClick={handlePost}>
+            Add new
+          </Button>,
+        ]}
       >
         <Input
           placeholder="Company Name"
-          name="name"
-          value={company.name}
+          name="company_name"
+          value={company.company_name}
           onChange={(e) => handleChanged(e)}
         />
         <Input

@@ -47,7 +47,7 @@ function SideBar() {
               <Link to="/companies/employee">Nhân Viên Trong Công Ty</Link>
             </Menu.Item>
             <Menu.Item key="4"> 
-              <Link to="/companies/services">Dịch Vụ Sử Dụng</Link>
+              <Link to="/companies/service">Dịch Vụ Sử Dụng</Link>
             </Menu.Item>
           </SubMenu>
           <Menu.Item key="5">
