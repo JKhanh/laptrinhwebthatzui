@@ -4,7 +4,7 @@ import reqwest from "reqwest";
 import axios from "axios";
 
 const StaffList = () => {
-  const url= 'http://localhost:8080/api/v1/staffs'
+  const url= 'http://128.199.190.229:9393//api/v1/staffs'
 
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
@@ -32,6 +32,12 @@ const StaffList = () => {
       url: url,
       method: "get",
       type: "json",
+      error: function(err) {
+        if(err.status === 404){
+          setLoading(false);
+          setData([]);
+        }
+      }
     }).then((data) => {
       console.log(data);
       setLoading(false);
@@ -71,26 +77,30 @@ const StaffList = () => {
       dataIndex: "phone_number",
     },
     {
-      title: "Cấp độ",
-      key: "level",
-      dataIndex: "level",
-    },
-    {
-      title: "Vị trí",
-      key: "position",
-      dataIndex: "position",
-    },
-    {
       title: "Action",
       key: "action",
       render: (text, record) => (
         <Space size="middle">
           <a>Sửa</a>
-          <a>Xóa</a>
+          <a onClick={ (e) =>{
+            deleteStaff(record.id)
+          }}>Xóa</a>
         </Space>
       ),
     },
   ];
+
+  const deleteStaff = (id) =>{
+    axios.delete(url + '/' + id)
+    .then((response) =>{
+        console.log(response)
+        fetch(pagination);
+        notification["success"]({
+            message: "Deleted",
+            duration: 3,
+          });
+    })
+  }
 
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
