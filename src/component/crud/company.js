@@ -52,6 +52,11 @@ const CompanyList = () => {
 
   const columns = [
     {
+      title: 'ID',
+      key: "id",
+      dataIndex: 'id'
+    },
+    {
       title: "Tên công ty",
       key: "company_name",
       dataIndex: "company_name",
